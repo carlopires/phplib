@@ -62,8 +62,15 @@ class CLI {
 		$found_option = false;
 
 		foreach($options as $op) {
-			if (array_search($op[0], $argv)) {
-				$op[2]($this->get_vars());
+			$cmd_parsed = explode(' ', $op[0]);
+			$cmd = $cmd_parsed[0];
+			
+			if (array_search($cmd, $argv)) {
+				$args =& array_slice($argv, 2);
+				$vars = $this->get_vars();
+				$func = $op[2];
+				
+				$func($args, $vars);
 				$found_option = true;
 			}
 		}
