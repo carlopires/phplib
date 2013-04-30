@@ -1,5 +1,8 @@
 <?php
 /*
+* ParseIf - A PHP paser for IF clauses
+* Carlo Pires <carlopires@gmail.com> 
+* 
 * This class parses the following construction 
 * (inspired by Django templates):
 *  
@@ -17,6 +20,14 @@
 *    ));
 *
 *    print $p->parse($v);
+*    
+*    // Variable names can also start with '$'
+*    // for instance:
+*    $p = new ParserIf(array(
+*        '$include_ids' => true,
+*        '$include_description' => true,
+*    ));
+*     
 *  
 * The contents of select-customer.sql could be:
 *    
@@ -33,6 +44,7 @@
 *        EMAIL
 *    from
 *        customers;
+*        
 *
 */
 class ParserIf {
@@ -106,13 +118,19 @@ class ParserIf {
 	function parse($text, $variables=null) {
 		// set global variables
 		if (is_array($this->variables))
-			foreach($this->variables as $name => $value)
-			$$name = $value;
+			foreach($this->variables as $name => $value) {
+				if ($name[0] == '$')
+					$name = substr($name, 1);
+				$$name = $value;
+			}
 
 		// set local variables
 		if (is_array($variables))
-			foreach($variables as $name => $value)
-			$$name = $value;
+			foreach($variables as $name => $value) {
+				if ($name[0] == '$')
+					$name = substr($name, 1);
+				$$name = $value;
+			}
 
 		// disable output if no debug
 		if (!$this->debug)
