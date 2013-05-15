@@ -39,8 +39,8 @@ abstract class CachedPropertiesObject {
 	private $cached_values = array();
 	
 	public function __get($name) {
-		if (is_array(self::$CACHED_PROPERTIES) &&
-			array_search($name, self::$CACHED_PROPERTIES) !== false) {
+		if (is_array(static::$CACHED_PROPERTIES) &&
+			array_search($name, static::$CACHED_PROPERTIES) !== false) {
 			
 			if (!array_key_exists($name, $this->cached_values)) {
 				if (method_exists($this, ($method = 'cached_'.$name)))
